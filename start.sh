@@ -12,20 +12,17 @@ if [[ -f $HITCH_KEY && -f $HITCH_CERT ]] && [[ ! ( -z $HITCH_PEM && -f $HITCH_PE
 elif [ -f $HITCH_PEM ]; then
   echo Using $HITCH_PEM
 else
-  # check if $DOMAIN is set, otherwise set to example.com
-  if [ -z $DOMAIN ]; then
-      export DOMAIN="example.com"
-  fi  
-
-  echo "Couldn't find PEM file, creating one for domain $DOMAIN"
+  echo "Couldn't find PEM file, creating one for domain $IP"
   cd /etc/ssl/hitch
-  openssl req -newkey rsa:2048 -sha256 -keyout example.com.key -nodes -x509 -days 365 -out example.crt -subj "/C=CH/ST=Zurich/L=Zurich/O=Snakeoil Inc/OU=IT Department/CN=$DOMAIN"
+  openssl req -newkey rsa:2048 -sha256 -keyout example.com.key -nodes -x509 -days 36500 -out example.crt -subj "/C=CH/ST=Tessin/L=Stabio/O=Jobtome International SA/OU=SRE/CN=34.96.108.144" -addext "subjectAltName=IP.1:$MY_POD_IP,IP.2:34.96.108.144,IP.3:127.0.0.1,DNS.1:spin.jobtome.jobtome.host"
   cat example.com.key example.crt > combined.pem
 fi
-
 
 exec bash -c \
   "exec /usr/local/sbin/hitch --user=hitch \
   $HITCH_PARAMS \
   --ciphers=$HITCH_CIPHER \
+  --tls-protos="TLSv1.2" \
+  --alpn-protos="h2" \
   $HITCH_PEM"
+
