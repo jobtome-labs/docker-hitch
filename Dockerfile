@@ -2,7 +2,7 @@ FROM alpine:3.12
 MAINTAINER Adrian Gschwend <adrian.gschwend@zazuko.com>
 
 # Only update below
-ARG HITCH_VERSION=1.6.0
+ARG HITCH_VERSION=1.7.0
 
 # dependencies
 RUN apk --update add bash build-base libev libev-dev automake openssl openssl-dev autoconf curl byacc flex
@@ -22,8 +22,8 @@ RUN cd / && \
 ADD start.sh /start.sh
 
 ENV HITCH_PEM    /etc/ssl/hitch/combined.pem
-ENV HITCH_PARAMS "--backend=[localhost]:80 --frontend=[*]:443"
-ENV HITCH_CIPHER EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
+ENV HITCH_PARAMS "--backend=[127.0.0.1]:8000 --frontend=[*]:8443+/etc/ssl/hitch/combined.pem"
+ENV HITCH_CIPHER ECDHE-RSA-AES128-GCM-SHA256
 
 CMD /start.sh
-EXPOSE 443
+EXPOSE 8443
