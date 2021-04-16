@@ -14,7 +14,7 @@ elif [ -f $HITCH_PEM ]; then
 else
   echo "Couldn't find PEM file, creating one for domain $IP"
   cd /etc/ssl/hitch
-  openssl req -newkey rsa:2048 -sha256 -keyout example.com.key -nodes -x509 -days 36500 -out example.crt -subj "/C=CH/ST=Tessin/L=Stabio/O=Jobtome International SA/OU=SRE/CN=$MY_POD_IP" -addext "subjectAltName=IP.1:$MY_POD_IP,IP.2:127.0.0.1"
+  openssl req -newkey rsa:2048 -sha256 -keyout example.com.key -nodes -x509 -days 36500 -out example.crt -subj "/C=CH/ST=Tessin/L=Stabio/O=Jobtome International SA/OU=SRE/CN=$MY_POD_IP" -addext "subjectAltName=IP.1:$MY_POD_IP,IP.2:127.0.0.1,DNS.1:spin.spin.svc.cluster.local"
   cat example.com.key example.crt > combined.pem
 fi
 
