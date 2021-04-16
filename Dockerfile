@@ -22,7 +22,7 @@ RUN cd / && \
 ADD start.sh /start.sh
 
 ENV HITCH_PEM    /etc/ssl/hitch/combined.pem
-ENV HITCH_PARAMS "--backend=[127.0.0.1]:8000 --frontend=[*]:8443+/etc/ssl/hitch/combined.pem"
+ENV HITCH_PARAMS "--backend=[127.0.0.1]:8000 --frontend=[*]:8443"
 ENV HITCH_CIPHER ECDHE-RSA-AES128-GCM-SHA256
 
 CMD /start.sh
